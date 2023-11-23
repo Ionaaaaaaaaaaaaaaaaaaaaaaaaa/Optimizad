@@ -15,24 +15,31 @@ def optimize(task):
     l1 = 3
     l2 = 2
     result = [CM_init.variables[0]*l1 + CM_init.variables[1]*l2]
+    stress = [CM_init.stress]
     print(CM_init.stress)
     plt.figure()
-    while convergence > 0.0001 and i < 20:
+    while convergence > 0.001 and i < 200:
         i+=1
         pop_ch,CM = create_new_population(pop_init, task,i)
         #pop_init = selection(pop_ch + pop_init)
         result.append(CM.variables[0]*l1 + CM.variables[1]*l2)
+        stress.append(CM.stress)
         convergence = abs(result[i] - result[i-1])
         print('convergence = ',convergence)
         #print([n for n in range(0,i+1)])
         print(result)
+        plt.subplot(1,2,1)
         plt.plot([n for n in range(0,i+1)],result)
         plt.xlabel('Iteration')
         plt.ylabel('Fitness func')
+        plt.subplot(1, 2, 2)
+        plt.plot([n for n in range(0, i + 1)], stress)
+        plt.xlabel('Iteration')
+        plt.ylabel('Stress')
         plt.show()
     print('end')
     print('==========Parameters=========')
-    print(' r1 = ',CM.variables[0],' r2 = ',CM.variables[1])
+    print(' r1 = ',CM.variables[0],' r2 = ',CM.variables[1],'Stress = ',CM.stress)
     return pop_init[0]
 
 
